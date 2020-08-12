@@ -1,26 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import Todos from './components/Todos';
+import Input from './components/Input';
 import './App.css';
+import uuid from 'uuid';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    todos: [],
+  };
+
+  // yesle id linchha ani yo yo kaam garchha
+
+  onClick = (id) => {
+    this.setState({
+      todos: this.state.todos.map((item) => {
+        if (item.id === id) {
+          item.complete = !item.complete;
+        }
+        return item;
+      }),
+    });
+    console.log(this.state.todos.complete);
+  };
+
+  delete = (id) => {
+    this.setState({
+      todos: [...this.state.todos.filter((todo) => todo.id !== id)],
+    });
+  };
+
+  Input = (title) => {
+    const newTodo = {
+      id: uuid.v4(),
+      title,
+      complete: false,
+    };
+    this.setState({todos: [...this.state.todos, newTodo]});
+  };
+
+  //yesle return gareko kuro screen ma dekhinchha
+  render() {
+    return (
+      <div className="App">
+        <Input Input={this.Input} />
+        <Todos
+          todos={this.state.todos}
+          onClick={this.onClick}
+          delete={this.delete}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
