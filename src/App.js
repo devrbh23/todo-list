@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import Todos from './components/Todos';
-import Input from './components/Input';
+
 import './App.css';
 import uuid from 'uuid';
+import Input from './components/Input';
 
 class App extends Component {
   state = {
     todos: [],
+    title: '',
   };
-
-  // yesle id linchha ani yo yo kaam garchha
 
   onClick = (id) => {
     this.setState({
@@ -29,20 +29,27 @@ class App extends Component {
     });
   };
 
-  Input = (title) => {
+  onSubmit = (e) => {
     const newTodo = {
       id: uuid.v4(),
-      title,
+      title: this.state.title,
       complete: false,
     };
     this.setState({todos: [...this.state.todos, newTodo]});
+    e.preventDefault();
   };
+  onChange = (e) => this.setState({title: e.target.value});
 
-  //yesle return gareko kuro screen ma dekhinchha
   render() {
+    console.log(this.state);
     return (
       <div className="App">
-        <Input Input={this.Input} />
+        <Input
+          onSubmit={this.onSubmit}
+          title={this.state.title}
+          onChange={this.onChange}
+        ></Input>
+
         <Todos
           todos={this.state.todos}
           onClick={this.onClick}
